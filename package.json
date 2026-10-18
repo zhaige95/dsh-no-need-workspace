@@ -10,7 +10,16 @@
     "workspace",
     "no-need-workspace"
   ],
+  "author": "yunge95",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zhaige95/dsh-no-need-workspace.git"
+  },
+  "homepage": "https://github.com/zhaige95/dsh-no-need-workspace#readme",
+  "bugs": {
+    "url": "https://github.com/zhaige95/dsh-no-need-workspace/issues"
+  },
   "engines": {
     "dsh": ">=0.2.1-rc.2 <0.3.0"
   },

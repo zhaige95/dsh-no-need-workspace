@@ -16,10 +16,15 @@
         "zh": "在工作区下拉框中增加“不使用工作区”选项；发送第一条消息后才创建以日期时间命名的文件夹，会话统一归入“无需工作区”父级。"
       },
       "icon": "icon.svg",
+      "author": "yunge95",
+      "homepage": "https://github.com/zhaige95/dsh-no-need-workspace",
+      "repository": {
+        "url": "https://github.com/zhaige95/dsh-no-need-workspace"
+      },
       "versions": [
         {
           "version": "0.2.0",
-          "publishTimestamp": 1792334541,
+          "publishTimestamp": 1792335154,
           "source": {
             "type": "npm"
           },
