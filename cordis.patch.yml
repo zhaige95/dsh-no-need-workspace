@@ -1,0 +1,4 @@
+# No Need Workspace bundle: one Host/Client row.
+- insert:
+    - id: no-need-workspace
+      name: no-need-workspace

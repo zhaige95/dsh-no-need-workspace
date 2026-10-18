@@ -1,0 +1,66 @@
+# no-need-workspace
+
+A DeepSeek Harness bundle that adds a **No workspace** action to the blank-session
+workspace picker. It defers the folder until the first message and keeps all such
+sessions grouped under one **No Need Workspace** parent.
+
+## Behavior
+
+- Clicking **No workspace** only ensures and selects the shared bucket workspace
+  at `$DSH_HOME/workspaces`; it does not create a per-session folder.
+- The first message in that session creates
+  `$DSH_HOME/workspaces/YYYY-MM-DD_HH-mm-ss` (a numeric suffix is added when the
+  same second already has a folder) and switches the session's working directory
+  to it.
+- The session header keeps pointing at the bucket, so the left sidebar shows
+  every such session under the **No Need Workspace** group. Timestamped folders
+  are not registered as separate workspaces and therefore do not form a folder
+  tree.
+- The existing **Add workspace…** action still uses the composed directory
+  picker; the sidebar `+` action is unchanged.
+
+`$DSH_HOME` is the configured Harness home (`$DSH_HOME`), falling back to
+`~/.dsh`. No folders are deleted automatically.
+
+## Install
+
+DSH ships its plugin manager as a bundle. Install `no-need-workspace` from the
+Web **Plugins** page by package name, or through the `plugin_manager` agent tool:
+
+```json
+{ "action": "install_bundle", "target": "no-need-workspace@0.2.0" }
+```
+
+The package declares `dsh.bundle.patch`, so installation selects the bundle and
+inserts its single Host/Client row.
+
+## DSH market index
+
+The repository root contains [`market.json`](market.json), a format-1 DSH plugin
+market index. Host it at a public HTTPS URL (for example the raw GitHub URL of
+this file) and add that URL in DSH **Settings → Plugin Market**. The index lists
+the npm source of `0.2.0`; after publishing a new version, add a version entry
+with its `publishTimestamp`.
+
+## Compatibility
+
+- Requires DSH `>=0.2.1-rc.2 <0.3.0` (`engines.dsh`).
+- The browser half deliberately shadows the shipped
+  `conversation.hero.workspace` slot (a `single` slot, registered at priority
+  `-100`). It depends on that slot's owner props and on the client
+  `workspaces.rename` / `uiWorkspace.pickDirectory` services from the pinned DSH
+  line. Re-verify the picker after a DSH upgrade.
+- Do not install this package together with another plugin that registers the
+  same `/no-need-workspace/ensure-bucket` route, and do not run two
+  auto-workspace plugins at once: each would assign its own timestamped folder on
+  the first message.
+
+## Security
+
+The Host half registers one loopback-only, same-origin `POST` route guarded by
+the `x-no-need-workspace: 1` header. It only creates empty directories under
+`$DSH_HOME/workspaces`. It adds no model prompt, tool, or telemetry.
+
+## License
+
+MIT. See [LICENSE](LICENSE).

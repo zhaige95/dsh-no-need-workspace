@@ -1,0 +1,33 @@
+{
+  "format": 1,
+  "title": {
+    "en": "No Need Workspace",
+    "zh": "无需工作区"
+  },
+  "plugins": [
+    {
+      "name": "no-need-workspace",
+      "title": {
+        "en": "No Need Workspace",
+        "zh": "无需工作区"
+      },
+      "description": {
+        "en": "Adds a No workspace action; the first message creates a dated working folder and the sessions stay grouped under one parent.",
+        "zh": "在工作区下拉框中增加“不使用工作区”选项；发送第一条消息后才创建以日期时间命名的文件夹，会话统一归入“无需工作区”父级。"
+      },
+      "icon": "icon.svg",
+      "versions": [
+        {
+          "version": "0.2.0",
+          "publishTimestamp": 1792334541,
+          "source": {
+            "type": "npm"
+          },
+          "engines": {
+            "dsh": ">=0.2.1-rc.2 <0.3.0"
+          }
+        }
+      ]
+    }
+  ]
+}

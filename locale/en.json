@@ -1,0 +1,6 @@
+{
+  "meta": {
+    "title": "No Need Workspace",
+    "description": "Adds a \"No workspace\" action to the blank-session workspace picker. Selecting it creates no folder yet; the first message creates a dated folder under the DSH data directory and works there. Those sessions are grouped under one \"No Need Workspace\" parent."
+  }
+}
