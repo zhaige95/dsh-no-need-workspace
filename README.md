@@ -36,7 +36,7 @@ DSH ships its plugin manager as a bundle. Install `no-need-workspace` from the
 Web **Plugins** page by package name, or through the `plugin_manager` agent tool:
 
 ```json
-{ "action": "install_bundle", "target": "no-need-workspace@0.2.0" }
+{ "action": "install_bundle", "target": "no-need-workspace@0.2.1" }
 ```
 
 The package declares `dsh.bundle.patch`, so installation selects the bundle and
@@ -47,8 +47,26 @@ inserts its single Host/Client row.
 The repository root contains [`market.json`](market.json), a format-1 DSH plugin
 market index. Host it at a public HTTPS URL (for example the raw GitHub URL of
 this file) and add that URL in DSH **Settings → Plugin Market**. The index lists
-the npm source of `0.2.0`; after publishing a new version, add a version entry
-with its `publishTimestamp`.
+the npm source of `0.2.1`; later releases are appended by the `Release` workflow
+described below, with the version's publish time as `publishTimestamp`.
+
+## Releasing
+
+1. Bump `version` in [`package.json`](package.json) and commit it on `main`.
+2. Tag the commit and push the tag:
+
+   ```bash
+   git tag v0.2.1
+   git push origin v0.2.1
+   ```
+
+The `Release` workflow checks that the tag matches `package.json` and points at a
+commit on `main`, publishes the package to npm, then runs
+[`scripts/update-market.mjs`](scripts/update-market.mjs) and commits the new
+`market.json` entry. It needs an `NPM_TOKEN` repository secret holding an npm
+**Automation** token; without it the run stops at the publish step and leaves the
+index untouched. Publishing the same version twice is refused by npm, so a rerun
+after a partial failure starts from a clean state.
 
 ## Compatibility
 

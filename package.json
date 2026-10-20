@@ -1,6 +1,6 @@
 {
   "name": "no-need-workspace",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "type": "module",
   "description": "A DeepSeek Harness bundle that adds a 'No workspace' action: the first message creates a dated folder and the sessions stay grouped under one parent.",
   "keywords": [
