@@ -1,8 +1,16 @@
 # no-need-workspace
 
+**English** | [简体中文](README.zh-CN.md)
+
 A DeepSeek Harness bundle that adds a **No workspace** action to the blank-session
 workspace picker. It defers the folder until the first message and keeps all such
 sessions grouped under one **No Need Workspace** parent.
+
+## Preview
+
+![The No workspace option at the bottom of the workspace picker](docs/screenshot.png)
+
+The blank-session workspace picker with **No workspace** selected.
 
 ## Behavior
 
