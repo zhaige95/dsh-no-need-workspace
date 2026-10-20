@@ -7,6 +7,7 @@ on:
 
 permissions:
   contents: write
+  id-token: write
 
 concurrency:
   group: release
@@ -15,6 +16,8 @@ concurrency:
 jobs:
   release:
     runs-on: ubuntu-latest
+    env:
+      PUBLISH_LOG: ${{ runner.temp }}/npm-publish.log
     steps:
       - name: Check out the tagged commit
         uses: actions/checkout@v4
@@ -24,13 +27,16 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 22
-          registry-url: https://registry.npmjs.org
+          node-version: 24
+
+      - name: Use npm 11
+        run: npm install --global npm@11
 
       - name: Check the tag
         shell: bash
         run: |
           set -euo pipefail
+          echo "node $(node -v), npm $(npm -v)"
           tag="${GITHUB_REF_NAME#v}"
           version="$(node -p "require('./package.json').version")"
           if [ "$tag" != "$version" ]; then
@@ -42,12 +48,29 @@ jobs:
             exit 1
           fi
 
+      # Authenticates through npm trusted publishing (GitHub OIDC), not a token:
+      # the package must list this repository and this workflow file on npm, and
+      # the job needs the id-token: write permission above.
       - name: Publish to npm
-        run: npm publish --access public
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        id: publish
+        shell: bash
+        run: |
+          set -o pipefail
+          npm publish --access public 2>&1 | tee "$PUBLISH_LOG"
+
+      - name: Report the publish output on failure
+        if: failure()
+        shell: bash
+        run: |
+          {
+            echo "### npm publish output"
+            echo '```'
+            if [ -f "$PUBLISH_LOG" ]; then tail -n 80 "$PUBLISH_LOG"; else echo "no publish log"; fi
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
 
       - name: Add the version to the market index
+        if: success()
         shell: bash
         run: |
           set -euo pipefail
@@ -55,6 +78,7 @@ jobs:
           node scripts/update-market.mjs "$GITHUB_REF_NAME"
 
       - name: Commit the market index
+        if: success()
         shell: bash
         run: |
           set -euo pipefail

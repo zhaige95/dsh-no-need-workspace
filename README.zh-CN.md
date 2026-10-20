@@ -60,9 +60,11 @@ DSH 的 **设置 → 插件市场** 中添加该 URL。索引中列出了 `0.2.1
 `Release` 工作流会先校验 tag 与 `package.json` 的版本一致、且 tag 指向 `main`
 上的提交，然后发布到 npm，再运行
 [`scripts/update-market.mjs`](scripts/update-market.mjs) 并把新的 `market.json`
-条目提交回 `main`。它需要仓库 Secret `NPM_TOKEN`（npm 的 **Automation** token）；
-没有该 Secret 时流程会在发布步骤停止，不会改动索引。npm 拒绝重复发布同一版本，
-因此部分失败后重新打 tag 也不会产生重复条目。
+条目提交回 `main`。发布使用 npm **可信发布（trusted publishing）**：包只需在
+npm 侧信任本仓库和 `release.yml` 一次（npm → 包的 Trusted publishing 设置，或
+`npm trust github`），工作流凭 GitHub OIDC 和 `id-token: write` 权限完成认证，
+仓库里不保存任何 npm token。npm 拒绝重复发布同一版本，因此部分失败后重新打 tag
+也不会产生重复条目。
 
 ## 兼容性
 

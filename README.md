@@ -63,10 +63,12 @@ described below, with the version's publish time as `publishTimestamp`.
 The `Release` workflow checks that the tag matches `package.json` and points at a
 commit on `main`, publishes the package to npm, then runs
 [`scripts/update-market.mjs`](scripts/update-market.mjs) and commits the new
-`market.json` entry. It needs an `NPM_TOKEN` repository secret holding an npm
-**Automation** token; without it the run stops at the publish step and leaves the
-index untouched. Publishing the same version twice is refused by npm, so a rerun
-after a partial failure starts from a clean state.
+`market.json` entry. Publishing uses npm **trusted publishing**: the package
+trusts this repository and `release.yml` once (npm → package → Trusted
+publishing, or `npm trust github`), and the job authenticates through GitHub OIDC
+with the `id-token: write` permission. No npm token secret is stored. Publishing
+the same version twice is refused by npm, so a rerun after a partial failure
+starts from a clean state.
 
 ## Compatibility
 
